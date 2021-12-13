@@ -188,6 +188,7 @@ public class HorasCompGrafDAO {
                 //Executa
                 lista.add(obj);
             }
+            con.close();
             return lista;
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Erro:" + erro);

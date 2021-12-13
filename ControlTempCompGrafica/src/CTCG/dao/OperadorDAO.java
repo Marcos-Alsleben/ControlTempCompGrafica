@@ -124,5 +124,38 @@ public class OperadorDAO {
             return null;
         }
     }
+    
+    //Metodo Pesquisar
+    public List<Operador> pesquisarCadOperador(String nome){
+        
+        try {
+            //Cria a Lista
+            List<Operador> lista = new ArrayList<>();
+            
+            //Cria comando sql
+            String sql = "select * from operador where nome=?";
+            
+            //Conecta ao banco de dados e organiza o comando sql
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, nome);                                        
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()){
+                
+                Operador obj = new Operador();
+                obj.setCod_oper(rs.getInt("cod_oper"));
+                obj.setCadastro(rs.getInt("cadastro"));
+                obj.setNome(rs.getString("nome"));
+                
+                //Executa
+                lista.add(obj);
+            }
+            con.close();
+            return lista;
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Erro:" + erro);
+            return null;
+        }
+    }
 
 }

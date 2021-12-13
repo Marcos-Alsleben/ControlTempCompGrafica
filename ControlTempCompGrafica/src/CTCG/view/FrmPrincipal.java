@@ -67,6 +67,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         return dataFormatada;
     }
+    
+    // Metodo Pegar Data
+    public String DataHora() {
+        Date data = new Date();
+        SimpleDateFormat formatar = new SimpleDateFormat("HH");
+        String dataFormatada = formatar.format(data);
+
+        return dataFormatada;
+    }
+    
+    // Metodo Pegar Data
+    public String DataMinuto() {
+        Date data = new Date();
+        SimpleDateFormat formatar = new SimpleDateFormat("mm");
+        String dataFormatada = formatar.format(data);
+
+        return dataFormatada;
+    }
 
     //Metodo mostrar cardLayout 1
     public void MostraCard1(String card) {
@@ -185,6 +203,34 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }
 
+    //Metodo Atualiza cbOperador
+    public void AtualizarcbOperador() {
+        OperadorDAO dao = new OperadorDAO();
+        List<Operador> lista = dao.listar();
+
+        cb_operador.removeAllItems();
+        cb_operador.addItem("*");
+
+        for (Operador c : lista) {
+            cb_operador.addItem(c.getNome());
+
+        }
+    }
+
+    //Metodo Atualiza cbObs
+    public void AtualizarcbObs() {
+        ObsCompGrafDAO dao = new ObsCompGrafDAO();
+        List<ObsCompGraf> lista = dao.listar();
+
+        cb_obs.removeAllItems();
+        cb_obs.addItem("*");
+
+        for (ObsCompGraf c : lista) {
+            cb_obs.addItem(c.getTipo());
+
+        }
+    }
+
     //limpar campos
     public void LimparOperador() {
         txt_codOper_cad.setText("");
@@ -210,13 +256,35 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     }
 
+    //limpar campos
+    public void LimparHoraCompGraf() {
+        txt_codRegistro.setText("");
+        txt_rp.setText("");
+        cb_operador.setSelectedItem("*");
+        cb_obs.setSelectedItem("*");
+        txt_dia.setText("");
+        txt_mes.setText("");
+        txt_ano.setText("");
+        txt_inicioHora.setText("");
+        txt_inicioMinuto.setText("");
+        txt_terminoHora.setText("");
+        txt_terminoMinuto.setText("");
+
+        PesquisaRegistro();
+
+    }
+
     /**
      * Creates new form FrmPrincipal
      */
+    String datacriacao = null;
+
     public FrmPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
         PersonalizarTabelas();
+        AtualizarcbOperador();
+        AtualizarcbObs();
     }
 
     /**
@@ -233,7 +301,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanelCard1 = new javax.swing.JPanel();
         jPanelCadastro = new javax.swing.JPanel();
-        txt_idFaca = new javax.swing.JTextField();
+        txt_codRegistro = new javax.swing.JTextField();
         txt_rp = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btn_buscaRp = new javax.swing.JButton();
@@ -260,13 +328,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         btn_limpaRp = new javax.swing.JButton();
-        btn_buscaRpFaca2 = new javax.swing.JButton();
+        btn_preencheData = new javax.swing.JButton();
         btn_limpaReg = new javax.swing.JButton();
         btn_excluiReg = new javax.swing.JButton();
         btn_alteraReg = new javax.swing.JButton();
         btn_novoReg = new javax.swing.JButton();
         jScrollregistro = new javax.swing.JScrollPane();
         tb_registro = new javax.swing.JTable();
+        btn_preencheHoraInicio = new javax.swing.JButton();
+        btn_preencheHoraTermino = new javax.swing.JButton();
         jPanelAjustes = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jButton8 = new javax.swing.JButton();
@@ -300,6 +370,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Ficha Controle de Tempo");
+        setMaximumSize(new java.awt.Dimension(660, 350));
+        setMinimumSize(new java.awt.Dimension(660, 350));
+        setPreferredSize(new java.awt.Dimension(660, 350));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -334,16 +409,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jPanelCadastro.setBackground(new java.awt.Color(65, 65, 65));
 
-        txt_idFaca.setBackground(new java.awt.Color(255, 255, 255, 0));
-        txt_idFaca.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
-        txt_idFaca.setForeground(new java.awt.Color(255, 255, 255));
-        txt_idFaca.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txt_idFaca.setBorder(null);
-        txt_idFaca.setEnabled(false);
-        txt_idFaca.setFocusable(false);
-        txt_idFaca.addActionListener(new java.awt.event.ActionListener() {
+        txt_codRegistro.setBackground(new java.awt.Color(255, 255, 255, 0));
+        txt_codRegistro.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        txt_codRegistro.setForeground(new java.awt.Color(255, 255, 255));
+        txt_codRegistro.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txt_codRegistro.setBorder(null);
+        txt_codRegistro.setEnabled(false);
+        txt_codRegistro.setFocusable(false);
+        txt_codRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_idFacaActionPerformed(evt);
+                txt_codRegistroActionPerformed(evt);
             }
         });
 
@@ -496,28 +571,32 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btn_buscaRpFaca2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Atualiza_16.png"))); // NOI18N
-        btn_buscaRpFaca2.setToolTipText("Atualiza data");
-        btn_buscaRpFaca2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btn_buscaRpFaca2.setBorderPainted(false);
-        btn_buscaRpFaca2.setMaximumSize(new java.awt.Dimension(30, 30));
-        btn_buscaRpFaca2.setMinimumSize(new java.awt.Dimension(30, 30));
-        btn_buscaRpFaca2.setPreferredSize(new java.awt.Dimension(30, 30));
-        btn_buscaRpFaca2.addActionListener(new java.awt.event.ActionListener() {
+        btn_preencheData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Atualiza_16.png"))); // NOI18N
+        btn_preencheData.setToolTipText("Preencher com data atual");
+        btn_preencheData.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_preencheData.setBorderPainted(false);
+        btn_preencheData.setMaximumSize(new java.awt.Dimension(30, 30));
+        btn_preencheData.setMinimumSize(new java.awt.Dimension(30, 30));
+        btn_preencheData.setPreferredSize(new java.awt.Dimension(30, 30));
+        btn_preencheData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_buscaRpFaca2ActionPerformed(evt);
+                btn_preencheDataActionPerformed(evt);
             }
         });
 
         btn_limpaReg.setBackground(new java.awt.Color(22, 22, 22));
         btn_limpaReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Limpar_32px.png"))); // NOI18N
-        btn_limpaReg.setToolTipText("Limpar!");
+        btn_limpaReg.setToolTipText("Limpa tudo");
         btn_limpaReg.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btn_limpaReg.setBorderPainted(false);
-        btn_limpaReg.setEnabled(false);
         btn_limpaReg.setMaximumSize(new java.awt.Dimension(40, 40));
         btn_limpaReg.setMinimumSize(new java.awt.Dimension(40, 40));
         btn_limpaReg.setPreferredSize(new java.awt.Dimension(40, 40));
+        btn_limpaReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpaRegActionPerformed(evt);
+            }
+        });
 
         btn_excluiReg.setBackground(new java.awt.Color(22, 22, 22));
         btn_excluiReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Remover_32px.png"))); // NOI18N
@@ -528,6 +607,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btn_excluiReg.setMaximumSize(new java.awt.Dimension(40, 40));
         btn_excluiReg.setMinimumSize(new java.awt.Dimension(40, 40));
         btn_excluiReg.setPreferredSize(new java.awt.Dimension(40, 40));
+        btn_excluiReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_excluiRegActionPerformed(evt);
+            }
+        });
 
         btn_alteraReg.setBackground(new java.awt.Color(22, 22, 22));
         btn_alteraReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Alterar_32px.png"))); // NOI18N
@@ -538,6 +622,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btn_alteraReg.setMaximumSize(new java.awt.Dimension(40, 40));
         btn_alteraReg.setMinimumSize(new java.awt.Dimension(40, 40));
         btn_alteraReg.setPreferredSize(new java.awt.Dimension(40, 40));
+        btn_alteraReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_alteraRegActionPerformed(evt);
+            }
+        });
 
         btn_novoReg.setBackground(new java.awt.Color(22, 22, 22));
         btn_novoReg.setForeground(new java.awt.Color(255, 255, 255));
@@ -545,10 +634,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btn_novoReg.setToolTipText("Adicionar novo!");
         btn_novoReg.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btn_novoReg.setBorderPainted(false);
-        btn_novoReg.setEnabled(false);
         btn_novoReg.setMaximumSize(new java.awt.Dimension(40, 40));
         btn_novoReg.setMinimumSize(new java.awt.Dimension(40, 40));
         btn_novoReg.setPreferredSize(new java.awt.Dimension(40, 40));
+        btn_novoReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_novoRegActionPerformed(evt);
+            }
+        });
 
         tb_registro.setBackground(new java.awt.Color(63, 63, 63));
         tb_registro.setForeground(new java.awt.Color(255, 255, 255));
@@ -560,7 +653,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "cod_hcg", "cadoperador", "Operador", "RP", "Obs", "Inicio", "Termino", "criado", "modificado", "H", "M"
+                "cod_hcg", "cadoperador", "Operador", "RP", "Obs", "Inicio", "Termino", "criado", "modificado", "Hr", "Min"
             }
         ) {
             Class[] types = new Class [] {
@@ -578,7 +671,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tb_registro.setToolTipText("Duplo clicke para alterar ou excluir cadastro");
         tb_registro.getTableHeader().setReorderingAllowed(false);
+        tb_registro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb_registroMouseClicked(evt);
+            }
+        });
         jScrollregistro.setViewportView(tb_registro);
         if (tb_registro.getColumnModel().getColumnCount() > 0) {
             tb_registro.getColumnModel().getColumn(0).setMinWidth(0);
@@ -609,6 +708,32 @@ public class FrmPrincipal extends javax.swing.JFrame {
             tb_registro.getColumnModel().getColumn(10).setResizable(false);
             tb_registro.getColumnModel().getColumn(10).setPreferredWidth(10);
         }
+
+        btn_preencheHoraInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Atualiza_16.png"))); // NOI18N
+        btn_preencheHoraInicio.setToolTipText("Preencher com hora atual");
+        btn_preencheHoraInicio.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_preencheHoraInicio.setBorderPainted(false);
+        btn_preencheHoraInicio.setMaximumSize(new java.awt.Dimension(30, 30));
+        btn_preencheHoraInicio.setMinimumSize(new java.awt.Dimension(30, 30));
+        btn_preencheHoraInicio.setPreferredSize(new java.awt.Dimension(30, 30));
+        btn_preencheHoraInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_preencheHoraInicioActionPerformed(evt);
+            }
+        });
+
+        btn_preencheHoraTermino.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Atualiza_16.png"))); // NOI18N
+        btn_preencheHoraTermino.setToolTipText("Preencher com hora atual");
+        btn_preencheHoraTermino.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_preencheHoraTermino.setBorderPainted(false);
+        btn_preencheHoraTermino.setMaximumSize(new java.awt.Dimension(30, 30));
+        btn_preencheHoraTermino.setMinimumSize(new java.awt.Dimension(30, 30));
+        btn_preencheHoraTermino.setPreferredSize(new java.awt.Dimension(30, 30));
+        btn_preencheHoraTermino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_preencheHoraTerminoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelCadastroLayout = new javax.swing.GroupLayout(jPanelCadastro);
         jPanelCadastro.setLayout(jPanelCadastroLayout);
@@ -642,11 +767,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cb_obs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanelCadastroLayout.createSequentialGroup()
                                         .addComponent(jLabel12)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txt_idFaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(cb_obs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(txt_codRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8, 8, 8))))
                             .addGroup(jPanelCadastroLayout.createSequentialGroup()
                                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanelCadastroLayout.createSequentialGroup()
@@ -660,7 +786,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                         .addGap(0, 0, 0)
                                         .addComponent(txt_ano, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, 0)
-                                        .addComponent(btn_buscaRpFaca2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn_preencheData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel13))
@@ -672,18 +798,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addGap(0, 0, 0)
                                 .addComponent(txt_inicioMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(btn_preencheHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel15)
                                     .addGroup(jPanelCadastroLayout.createSequentialGroup()
                                         .addComponent(txt_terminoHora, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, 0)
                                         .addComponent(jLabel16)
                                         .addGap(0, 0, 0)
-                                        .addComponent(txt_terminoMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel15))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txt_terminoMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(btn_preencheHoraTermino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btn_novoReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_alteraReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -691,7 +821,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                 .addComponent(btn_excluiReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_limpaReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6))))
+                        .addContainerGap())))
         );
         jPanelCadastroLayout.setVerticalGroup(
             jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -701,7 +831,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_idFaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_codRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(txt_rp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_buscaRp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -722,7 +852,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(txt_ano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_buscaRpFaca2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btn_preencheData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanelCadastroLayout.createSequentialGroup()
                         .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -735,14 +865,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_terminoHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16)
-                            .addComponent(txt_terminoMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txt_terminoMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_preencheHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_preencheHoraTermino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btn_excluiReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_limpaReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(btn_novoReg, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_alteraReg, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollregistro, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                .addComponent(jScrollregistro, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1009,7 +1141,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             .addComponent(btn_limpOper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_addOper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrolloperador, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         jPanelCard2.add(jPanelOperador, "operador");
@@ -1188,7 +1320,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             .addComponent(btn_limpObs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_addObs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollobs, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 42, Short.MAX_VALUE))
+                .addGap(0, 88, Short.MAX_VALUE))
         );
 
         jPanelCard2.add(jPanelObs, "obs");
@@ -1347,7 +1479,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
                 LimparOperador();
 
-                //AtualizarcbClientes();
+                AtualizarcbOperador();
             }
         }
     }//GEN-LAST:event_btn_addOperActionPerformed
@@ -1356,6 +1488,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         listarOperador();
         listarObsCompGraf();
+
     }//GEN-LAST:event_formWindowActivated
 
     private void tb_operadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_operadorMouseClicked
@@ -1392,7 +1525,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         LimparOperador();
 
-        //AtualizarcbClientes();
+        AtualizarcbOperador();
     }//GEN-LAST:event_btn_altOperActionPerformed
 
     private void btn_exclOperActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exclOperActionPerformed
@@ -1412,7 +1545,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
             LimparOperador();
 
-            //AtualizarcbClientes();
+            AtualizarcbOperador();
         }
     }//GEN-LAST:event_btn_exclOperActionPerformed
 
@@ -1442,7 +1575,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         LimparObsCompGraf();
 
-        //AtualizarcbClientes();
+        AtualizarcbObs();
     }//GEN-LAST:event_btn_addObsActionPerformed
 
     private void btn_altObsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_altObsActionPerformed
@@ -1456,7 +1589,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         LimparObsCompGraf();
 
-        //AtualizarcbClientes();
+        AtualizarcbObs();
     }//GEN-LAST:event_btn_altObsActionPerformed
 
     private void btn_exclObsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exclObsActionPerformed
@@ -1476,7 +1609,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
             LimparObsCompGraf();
 
-            //AtualizarcbClientes();
+            AtualizarcbObs();
         }
     }//GEN-LAST:event_btn_exclObsActionPerformed
 
@@ -1500,9 +1633,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_tb_obsMouseClicked
 
-    private void txt_idFacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_idFacaActionPerformed
+    private void txt_codRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_codRegistroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_idFacaActionPerformed
+    }//GEN-LAST:event_txt_codRegistroActionPerformed
 
     private void txt_mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_mesActionPerformed
         // TODO add your handling code here:
@@ -1520,12 +1653,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_terminoMinutoActionPerformed
 
-    private void btn_buscaRpFaca2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscaRpFaca2ActionPerformed
+    private void btn_preencheDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_preencheDataActionPerformed
 
         txt_dia.setText(DataDia());
         txt_mes.setText(DataMes());
         txt_ano.setText(DataAno());
-    }//GEN-LAST:event_btn_buscaRpFaca2ActionPerformed
+    }//GEN-LAST:event_btn_preencheDataActionPerformed
 
     private void btn_limpaRpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpaRpActionPerformed
 
@@ -1547,7 +1680,250 @@ public class FrmPrincipal extends javax.swing.JFrame {
             txt_rp.setText("");
             PesquisaRegistro();
         }
+
     }//GEN-LAST:event_txt_rpKeyPressed
+
+    private void btn_novoRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_novoRegActionPerformed
+
+        if ("".equals(txt_rp.getText())) {
+            JOptionPane.showMessageDialog(null, "RP Inválido!", "", 2);
+        } else {
+            if ("*".equals(cb_operador.getSelectedItem().toString())) {
+                JOptionPane.showMessageDialog(null, "Operador Iválido!", "", 2);
+            } else {
+                if ("*".equals(cb_obs.getSelectedItem().toString())) {
+                    JOptionPane.showMessageDialog(null, "Observação Iválido!", "", 2);
+                } else {
+                    if ("".equals(txt_dia.getText())) {
+                        JOptionPane.showMessageDialog(null, "Dia Iválido!", "", 2);
+                    } else {
+                        if ("".equals(txt_mes.getText())) {
+                            JOptionPane.showMessageDialog(null, "Mês Iválido!", "", 2);
+                        } else {
+                            if ("".equals(txt_ano.getText())) {
+                                JOptionPane.showMessageDialog(null, "Ano Iválido!", "", 2);
+                            } else {
+                                if ("".equals(txt_inicioHora.getText())) {
+                                    JOptionPane.showMessageDialog(null, "Hora inicio Iválido!", "", 2);
+                                } else {
+                                    if ("".equals(txt_inicioMinuto.getText())) {
+                                        JOptionPane.showMessageDialog(null, "Minuto inicio Iválido!", "", 2);
+                                    } else {
+                                        if ("".equals(txt_terminoHora.getText())) {
+                                            JOptionPane.showMessageDialog(null, "Hora término Iválido!", "", 2);
+                                        } else {
+                                            if ("".equals(txt_terminoMinuto.getText())) {
+                                                JOptionPane.showMessageDialog(null, "Minuto término Iválido!", "", 2);
+                                            } else {
+                                                String dh = DataCompleta();
+                                                String inicio = txt_ano.getText() + "-" + txt_mes.getText() + "-" + txt_dia.getText() + " "
+                                                        + txt_inicioHora.getText() + ":" + txt_inicioMinuto.getText();
+                                                String termino = txt_ano.getText() + "-" + txt_mes.getText() + "-" + txt_dia.getText() + " "
+                                                        + txt_terminoHora.getText() + ":" + txt_terminoMinuto.getText();
+                                                int cadoperador = 0;
+
+                                                OperadorDAO dao = new OperadorDAO();
+                                                List<Operador> lista = dao.pesquisarCadOperador(cb_operador.getSelectedItem().toString());
+
+                                                for (Operador c : lista) {
+                                                    cadoperador = c.getCadastro();
+
+                                                }
+
+                                                HorasCompGraf obj = new HorasCompGraf();
+
+                                                obj.setCadoperador(cadoperador);
+                                                obj.setNomeoperador(cb_operador.getSelectedItem().toString());
+                                                obj.setOrdemprod(txt_rp.getText());
+                                                obj.setObs(cb_obs.getSelectedItem().toString());
+                                                obj.setInicio(inicio);
+                                                obj.setTermino(termino);
+                                                obj.setCriado(dh);
+                                                obj.setModificado(dh);
+
+                                                HorasCompGrafDAO dao2 = new HorasCompGrafDAO();
+                                                dao2.cadastrar(obj);
+
+                                                LimparHoraCompGraf();
+                                                PesquisaRegistro();
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btn_novoRegActionPerformed
+
+    private void btn_limpaRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpaRegActionPerformed
+
+        LimparHoraCompGraf();
+
+        btn_novoReg.setEnabled(true);
+        btn_excluiReg.setEnabled(false);
+        btn_alteraReg.setEnabled(false);
+        btn_limpaReg.setEnabled(true);
+    }//GEN-LAST:event_btn_limpaRegActionPerformed
+
+    private void btn_alteraRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alteraRegActionPerformed
+
+        if ("".equals(txt_rp.getText())) {
+            JOptionPane.showMessageDialog(null, "RP Inválido!", "", 2);
+        } else {
+            if ("*".equals(cb_operador.getSelectedItem().toString())) {
+                JOptionPane.showMessageDialog(null, "Operador Iválido!", "", 2);
+            } else {
+                if ("*".equals(cb_obs.getSelectedItem().toString())) {
+                    JOptionPane.showMessageDialog(null, "Observação Iválido!", "", 2);
+                } else {
+                    if ("".equals(txt_dia.getText())) {
+                        JOptionPane.showMessageDialog(null, "Dia Iválido!", "", 2);
+                    } else {
+                        if ("".equals(txt_mes.getText())) {
+                            JOptionPane.showMessageDialog(null, "Mês Iválido!", "", 2);
+                        } else {
+                            if ("".equals(txt_ano.getText())) {
+                                JOptionPane.showMessageDialog(null, "Ano Iválido!", "", 2);
+                            } else {
+                                if ("".equals(txt_inicioHora.getText())) {
+                                    JOptionPane.showMessageDialog(null, "Hora inicio Iválido!", "", 2);
+                                } else {
+                                    if ("".equals(txt_inicioMinuto.getText())) {
+                                        JOptionPane.showMessageDialog(null, "Minuto inicio Iválido!", "", 2);
+                                    } else {
+                                        if ("".equals(txt_terminoHora.getText())) {
+                                            JOptionPane.showMessageDialog(null, "Hora término Iválido!", "", 2);
+                                        } else {
+                                            if ("".equals(txt_terminoMinuto.getText())) {
+                                                JOptionPane.showMessageDialog(null, "Minuto término Iválido!", "", 2);
+                                            } else {
+                                                String dh = DataCompleta();
+                                                String inicio = txt_ano.getText() + "-" + txt_mes.getText() + "-" + txt_dia.getText() + " "
+                                                        + txt_inicioHora.getText() + ":" + txt_inicioMinuto.getText();
+                                                String termino = txt_ano.getText() + "-" + txt_mes.getText() + "-" + txt_dia.getText() + " "
+                                                        + txt_terminoHora.getText() + ":" + txt_terminoMinuto.getText();
+                                                int cadoperador = 0;
+
+                                                OperadorDAO dao = new OperadorDAO();
+                                                List<Operador> lista = dao.pesquisarCadOperador(cb_operador.getSelectedItem().toString());
+
+                                                for (Operador c : lista) {
+                                                    cadoperador = c.getCadastro();
+
+                                                }
+
+                                                HorasCompGraf obj = new HorasCompGraf();
+
+                                                obj.setCadoperador(cadoperador);
+                                                obj.setNomeoperador(cb_operador.getSelectedItem().toString());
+                                                obj.setOrdemprod(txt_rp.getText());
+                                                obj.setObs(cb_obs.getSelectedItem().toString());
+                                                obj.setInicio(inicio);
+                                                obj.setTermino(termino);
+                                                obj.setCriado(datacriacao);
+                                                obj.setModificado(dh);
+                                                obj.setCod_hcg(Integer.parseInt(txt_codRegistro.getText()));
+
+                                                HorasCompGrafDAO dao2 = new HorasCompGrafDAO();
+                                                dao2.alterar(obj);
+
+                                                LimparHoraCompGraf();
+                                                PesquisaRegistro();
+
+                                                btn_novoReg.setEnabled(true);
+                                                btn_excluiReg.setEnabled(false);
+                                                btn_alteraReg.setEnabled(false);
+                                                btn_limpaReg.setEnabled(true);
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btn_alteraRegActionPerformed
+
+    private void tb_registroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_registroMouseClicked
+
+        tb_registro.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    datacriacao = tb_registro.getValueAt(tb_registro.getSelectedRow(), 7).toString();;
+
+                    String c0 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 0).toString();
+                    String c1 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 1).toString();
+                    String c2 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 2).toString();
+                    String c3 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 3).toString();
+                    String c4 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 4).toString();
+                    String c5 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 5).toString();
+                    String c6 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 6).toString();
+                    String c7 = tb_registro.getValueAt(tb_registro.getSelectedRow(), 7).toString();
+
+                    txt_codRegistro.setText(c0);
+                    txt_rp.setText(c3);
+                    cb_operador.setSelectedItem(c2);
+                    cb_obs.setSelectedItem(c4);
+                    txt_dia.setText(c5.substring(8, 10));
+                    txt_mes.setText(c5.substring(5, 7));
+                    txt_ano.setText(c5.substring(0, 4));
+                    txt_inicioHora.setText(c5.substring(11, 13));
+                    txt_inicioMinuto.setText(c5.substring(14, 16));
+                    txt_terminoHora.setText(c6.substring(11, 13));
+                    txt_terminoMinuto.setText(c6.substring(14, 16));
+
+                    btn_novoReg.setEnabled(false);
+                    btn_excluiReg.setEnabled(true);
+                    btn_alteraReg.setEnabled(true);
+                    btn_limpaReg.setEnabled(true);
+                }
+            }
+        });
+    }//GEN-LAST:event_tb_registroMouseClicked
+
+    private void btn_excluiRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_excluiRegActionPerformed
+
+        int resposta = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja "
+                + "excluir este registro?", "", JOptionPane.YES_NO_OPTION);
+
+        if (resposta == 0) {
+            HorasCompGraf obj = new HorasCompGraf();
+
+            obj.setCod_hcg(Integer.parseInt(txt_codRegistro.getText()));
+
+            HorasCompGrafDAO dao = new HorasCompGrafDAO();
+
+            dao.excluir(obj);
+
+            LimparHoraCompGraf();
+
+            btn_novoReg.setEnabled(true);
+            btn_excluiReg.setEnabled(false);
+            btn_alteraReg.setEnabled(false);
+            btn_limpaReg.setEnabled(true);
+        }
+    }//GEN-LAST:event_btn_excluiRegActionPerformed
+
+    private void btn_preencheHoraInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_preencheHoraInicioActionPerformed
+        
+        txt_inicioHora.setText(DataHora());
+        txt_inicioMinuto.setText(DataMinuto());
+    }//GEN-LAST:event_btn_preencheHoraInicioActionPerformed
+
+    private void btn_preencheHoraTerminoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_preencheHoraTerminoActionPerformed
+        
+        txt_terminoHora.setText(DataHora());
+        txt_terminoMinuto.setText(DataMinuto());
+    }//GEN-LAST:event_btn_preencheHoraTerminoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1591,7 +1967,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_altOper;
     private javax.swing.JButton btn_alteraReg;
     private javax.swing.JButton btn_buscaRp;
-    private javax.swing.JButton btn_buscaRpFaca2;
     private javax.swing.JButton btn_exclObs;
     private javax.swing.JButton btn_exclOper;
     private javax.swing.JButton btn_excluiReg;
@@ -1600,6 +1975,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_limpaReg;
     private javax.swing.JButton btn_limpaRp;
     private javax.swing.JButton btn_novoReg;
+    private javax.swing.JButton btn_preencheData;
+    private javax.swing.JButton btn_preencheHoraInicio;
+    private javax.swing.JButton btn_preencheHoraTermino;
     public javax.swing.JComboBox cb_obs;
     public javax.swing.JComboBox cb_operador;
     private javax.swing.JButton jButton1;
@@ -1645,8 +2023,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField txt_cadastroOper_cad;
     private javax.swing.JTextField txt_codObs_cad;
     private javax.swing.JTextField txt_codOper_cad;
+    public javax.swing.JTextField txt_codRegistro;
     public javax.swing.JTextField txt_dia;
-    public javax.swing.JTextField txt_idFaca;
     public javax.swing.JTextField txt_inicioHora;
     public javax.swing.JTextField txt_inicioMinuto;
     public javax.swing.JTextField txt_mes;
