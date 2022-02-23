@@ -144,7 +144,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 c.getH(),
                 c.getM()
             });
-
         }
     }
 
